@@ -144,14 +144,14 @@ def send_random_block(sid,data): # 傳送方塊種子碼
 @sio.event
 def tetris_server_block(sid, data):
     room_num = data['room_num']
-    sio.emit('tetris_client_block', data, room=room_num)
+    sio.emit('tetris_client_block', data, room=room_num, skip_sid=sid)
 
 @sio.event
 def gameover(sid,data):
     room_num = data['room_num']
     gameover_count[room_num] = gameover_count[room_num] + 1
     # 只要有人掛掉就廣播，不論是不是雙方都掛掉
-    sio.emit('client_gameover', data, room=room_num)
+    sio.emit('client_gameover', data, room=room_num, skip_sid=sid)
     
     if gameover_count[room_num] >= 2: # 雙方都掛掉，遊戲重置房間狀態
         play_ready[room_num] = [-1,-1]
